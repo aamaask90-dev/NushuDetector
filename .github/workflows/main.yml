@@ -32,9 +32,9 @@ jobs:
         echo "Downloading NmsEngine.kt from Google Drive..."
         wget --no-check-certificate "https://docs.google.com/uc?export=download&id=18IeCA3OpNK_Lb1OJq0xEWztYCfQ7Cl01" -O app/src/main/java/com/example/engine/NmsEngine.kt
 
-    - name: Setup Gradle Wrapper to Fix Errors
+    - name: Setup Gradle Wrapper to Required Version
       run: |
-        gradle wrapper --gradle-version 8.0
+        gradle wrapper --gradle-version 9.3.1
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
