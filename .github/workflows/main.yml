@@ -1,4 +1,4 @@
-name: Build Android APK Force Model
+name: Build Android APK Force Model & Engine
 
 on:
   push:
@@ -19,23 +19,31 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Ensure Assets Directory Exists
-      run: mkdir -p app/src/main/assets
-
-    - name: Force Download Model (best.onnx)
+    - name: Ensure Target Directories Exist
       run: |
-        echo "Downloading and forcing model into assets..."
-        # ضع رابط التحميل المباشر لملف best.onnx الخاص بك هنا إذا كان مرفوعاً على درايف أو سيرفر، أو سيتم جلبه تلقائياً
-        # wget -O app/src/main/assets/best.onnx "رابط_التحميل_المباشر"
+        mkdir -p app/src/main/assets
+        mkdir -p app/src/main/java/com/example/engine
+
+    - name: Force Download Model and Engine from Google Drive
+      run: |
+        echo "Downloading best.onnx from Google Drive..."
+        # تحميل النموذج وإجباره في مجلد الـ assets
+        wget --no-check-certificate "https://docs.google.com/uc?export=download&id=1tCpDpgb6eCMfl-kQwHEectH51m3PTl9r" -O app/src/main/assets/best.onnx
+
+        echo "Downloading NmsEngine.kt from Google Drive..."
+        # تحميل ملف المحرك وإجباره في مجلد الـ engine
+        wget --no-check-certificate "https://docs.google.com/uc?export=download&id=18IeCA3OpNK_Lb1OJq0xEWztYCfQ7Cl01" -O app/src/main/java/com/example/engine/NmsEngine.kt
+
+        echo "Files downloaded and injected successfully!"
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build APK with Gradle
+    - name: Build Final APK
       run: ./gradlew assembleDebug
 
-    - name: Upload Final APK with Model
+    - name: Upload Final APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-final-debug
+        name: app-complete-with-model
         path: app/build/outputs/apk/debug/app-debug.apk
