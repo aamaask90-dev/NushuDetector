@@ -32,6 +32,10 @@ jobs:
         echo "Downloading NmsEngine.kt from Google Drive..."
         wget --no-check-certificate "https://docs.google.com/uc?export=download&id=18IeCA3OpNK_Lb1OJq0xEWztYCfQ7Cl01" -O app/src/main/java/com/example/engine/NmsEngine.kt
 
+    - name: Create Dummy google-services.json to Fix Error
+      run: |
+        echo '{"project_info": {"project_number": "123456789", "project_id": "dummy-project"}, "client": [{"client_info": {"mobilesdk_app_id": "1:123:android:123"}, "oauth_client": [], "api_key": [{"current_key": "AIzaSyDummyKey"}], "services": {"analytics_service": {"status": "1"}, "app_invite_service": {"status": "1"}, "ads_service": {"status": "1"}}}]}' > app/google-services.json
+
     - name: Setup Gradle Wrapper to Required Version
       run: |
         gradle wrapper --gradle-version 9.3.1
